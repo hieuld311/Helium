@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="pref_screen_rotation_keys">
+        <item>Off</item>
+        <item>Portrait</item>
+        <item>Landscape</item>
+    </array>
+    <array name="pref_screen_rotation_values">
+        <item>auto</item>
+        <item>portrait</item>
+        <item>landscape</item>
+    </array>
+    <array name="pref_volume_pagination_keys">
+        <item>Off</item>
+        <item>On</item>
+        <item>Reversed</item>
+    </array>
+    <array name="pref_volume_pagination_values">
+        <item>disabled</item>
+        <item>enabled</item>
+        <item>reversed</item>
+    </array>
+</resources>

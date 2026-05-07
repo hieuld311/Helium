@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:textSize="16sp"
+    android:textColor="?android:attr/textColorPrimary"
+    android:gravity="center_vertical"
+    android:paddingLeft="16dp"
+    android:paddingTop="16dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:drawableLeft="@drawable/ic_recent_search"
+    android:drawablePadding="32dp"
+    android:drawableStart="@drawable/ic_recent_search"
+    app:drawableTint="@color/search_recent_icon_tint"/>

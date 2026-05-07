@@ -1,0 +1,4 @@
+html, body {
+    /* Prevent bad CSS from overflowing, causing overscroll errors. */
+    overflow-x: hidden;
+}

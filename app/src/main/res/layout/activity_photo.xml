@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.hieuld.reader.widget.ScrimInsetsFrameLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scrim_layout"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:insetForegroundColor="#0000">
+    <com.hieuld.reader.widget.PhotoViewDragToCloseFrame
+        android:id="@+id/close_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.github.chrisbanes.photoview.PhotoView
+            android:id="@+id/showcasedImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:soundEffectsEnabled="false"/>
+    </com.hieuld.reader.widget.PhotoViewDragToCloseFrame>
+    <FrameLayout
+        android:id="@+id/ui_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:background="@drawable/content_shade"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_close_white"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    </FrameLayout>
+</com.hieuld.reader.widget.ScrimInsetsFrameLayout>

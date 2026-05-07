@@ -1,0 +1,33 @@
+@font-face {
+    font-family: 'ArbutusSlab-Regular';
+    font-style: normal;
+    font-weight: 400;
+    src: url(file:///android_asset/fonts/ArbutusSlab-Regular.ttf);
+}
+
+* {
+    outline: none !important;
+}
+
+body {
+    padding: 0 !important;
+    font-family: ArbutusSlab-Regular;
+    word-break: break-word;
+}
+
+html {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+sup {
+    vertical-align: top !important;
+}
+
+sub {
+    vertical-align: bottom !important;
+}
+
+img {
+    max-width: 100% !important;
+}

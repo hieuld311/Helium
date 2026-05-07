@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/revoke_access"
+        android:title="@string/pref_sync_revoke_access"
+        app:showAsAction="never"/>
+</menu>

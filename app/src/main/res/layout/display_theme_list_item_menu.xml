@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImageButton xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/display_theme_ripple"
+    android:layout_width="42dp"
+    android:layout_height="42dp"
+    android:src="@drawable/ic_display_settings_theme_more"
+    android:scaleType="center"
+    android:contentDescription="@string/display_settings_theme_more_desc"
+    app:tint="?android:attr/textColorPrimary"/>
