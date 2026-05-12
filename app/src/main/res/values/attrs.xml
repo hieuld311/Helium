@@ -55,4 +55,7 @@
     <attr name="readerBackground" format="color" />
     <attr name="readerForeground" format="color" />
 
+    <!-- Theme line height -->
+    <attr name="themeLineHeight" format="dimension" />
+
 </resources>

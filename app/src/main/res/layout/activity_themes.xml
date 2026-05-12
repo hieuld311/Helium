@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <com.hieuld.helium.widget.NavigationTintedToolbar
-        android:theme="@style/ThemeOverlay.Lithium.DayNight.ActionBar"
+        android:theme="@style/ThemeOverlay.Helium.DayNight.ActionBar"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"

@@ -17,8 +17,8 @@
         <item quantity="other">Remove %1$d books from %2$s?</item>
     </plurals>
     <plurals name="library_update_failed_details_title">
-        <item quantity="one">%1$d book couldn&apos;t be loaded</item>
-        <item quantity="other">%1$d books couldn&apos;t be loaded</item>
+        <item quantity="one">%1$d book couldn\'t be loaded</item>
+        <item quantity="other">%1$d books couldn\'t be loaded</item>
     </plurals>
     <plurals name="library_updated_new">
         <item quantity="one">%1$d book was added to your library.</item>
