@@ -3,8 +3,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.hieuld.reader.widget.NavigationTintedToolbar
-        android:theme="@style/ThemeOverlay.Helium.DayNight.ActionBar"
+    <com.hieuld.helium.widget.NavigationTintedToolbar
+        android:theme="@style/ThemeOverlay.Lithium.DayNight.ActionBar"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -48,9 +48,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="16dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="8dp">
+                        android:layout_marginRight="8dp">
                         <TextView
                             android:textSize="32sp"
                             android:textColor="?android:attr/textColorPrimary"
@@ -114,7 +112,7 @@
                         android:layout_height="48dp"
                         android:text="@string/theme_colors_header"
                         style="@style/MaterialSubheader"/>
-                    <com.hieuld.reader.themes.ThemeEditColorView
+                    <com.hieuld.helium.themes.ThemeEditColorView
                         android:textColor="?android:attr/textColorPrimary"
                         android:id="@+id/background_color"
                         android:background="?attr/selectableItemBackground"
@@ -125,7 +123,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/theme_background_color_label"/>
-                    <com.hieuld.reader.themes.ThemeEditColorView
+                    <com.hieuld.helium.themes.ThemeEditColorView
                         android:textColor="?android:attr/textColorPrimary"
                         android:id="@+id/text_color"
                         android:background="?attr/selectableItemBackground"
@@ -136,7 +134,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/theme_text_color_label"/>
-                    <com.hieuld.reader.themes.ThemeEditColorView
+                    <com.hieuld.helium.themes.ThemeEditColorView
                         android:textColor="?android:attr/textColorPrimary"
                         android:id="@+id/link_color"
                         android:background="?attr/selectableItemBackground"
@@ -161,9 +159,7 @@
                         android:layout_marginLeft="12dp"
                         android:layout_marginRight="16dp"
                         android:layout_marginBottom="16dp"
-                        android:text="@string/theme_use_dark_chrome"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginEnd="16dp"/>
+                        android:text="@string/theme_use_dark_chrome"/>
                 </LinearLayout>
                 <TextView
                     android:textSize="16sp"

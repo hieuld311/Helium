@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.DisplayCutout;
+import android.view.View;
 import android.view.WindowInsets;
 import android.widget.FrameLayout;
 
@@ -49,6 +50,7 @@ public class DisplayCutoutFrameLayout extends FrameLayout {
         if (!this.mPaintCutout) {
             this.mColor = null;
         } else {
+            // MEASURED_STATE_MASK = 0xFF000000 (Màu đen đặc)
             this.mColor = new ColorDrawable(0xFF000000);
         }
         setWillNotDraw(!this.mPaintCutout);

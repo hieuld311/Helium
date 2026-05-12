@@ -70,6 +70,5 @@
         android:layout_marginLeft="8dp"
         android:src="@drawable/ic_item_selected_check"
         android:contentDescription="@string/checked_desc"
-        android:layout_marginStart="8dp"
         app:tint="@color/book_item_selected_check_color"/>
 </androidx.cardview.widget.CardView>

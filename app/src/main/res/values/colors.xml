@@ -15,8 +15,8 @@
     <color name="annotation_none_stroke_color">#333333</color>
     <color name="annotation_remove_color">#d13030</color>
     <color name="annotation_selected_bg_color">#1f000000</color>
-    <color name="app_primary">#42f5b6</color>
-    <color name="app_primary_dark">#42d4f5</color>
+    <color name="app_primary">#5f2deb</color>
+    <color name="app_primary_dark">#4a1cc9</color>
     <color name="app_secondary">#f03737</color>
     <color name="background_floating_material_dark">@color/material_grey_800</color>
     <color name="background_floating_material_light">@android:color/white</color>

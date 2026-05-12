@@ -19,10 +19,11 @@ import com.hieuld.helium.util.Utils;
 import com.jaredrummler.android.colorpicker.ColorPickerDialog;
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
 
-public class ThemeEditColorView extends AppCompatTextView implements View.OnClickListener, ColorPickerDialogListener {
+public class ThemeEditColorView extends AppCompatTextView
+        implements View.OnClickListener, ColorPickerDialogListener {
 
     private int mColor;
-    private Context mContext;
+    private final Context mContext;
     private FragmentManager mFragmentManager;
     private String mFragmentTag;
     private OnColorChangedListener mListener;
@@ -33,25 +34,25 @@ public class ThemeEditColorView extends AppCompatTextView implements View.OnClic
 
     public ThemeEditColorView(Context context) {
         super(context);
-        init(context);
+        this.mContext = context;
+        init();
     }
 
     public ThemeEditColorView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        this.mContext = context;
+        init();
     }
 
     public ThemeEditColorView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+        this.mContext = context;
+        init();
     }
 
-    private void init(Context context) {
-        this.mContext = context;
-
+    private void init() {
         setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16.0f);
         setGravity(Gravity.CENTER_VERTICAL);
-
         setCompoundDrawablesWithIntrinsicBounds(R.drawable.themes_theme_circle, 0, 0, 0);
         setCompoundDrawablePadding(Utils.dpToPx(this.mContext, 16));
         setOnClickListener(this);
@@ -75,15 +76,13 @@ public class ThemeEditColorView extends AppCompatTextView implements View.OnClic
         this.mColor = color;
         int opaqueColor = color | 0xFF000000;
 
-        GradientDrawable gradientDrawable = (GradientDrawable) ContextCompat.getDrawable(this.mContext, R.drawable.themes_theme_circle).mutate();
-        gradientDrawable.setColor(opaqueColor);
+        GradientDrawable gd = (GradientDrawable) ContextCompat.getDrawable(this.mContext, R.drawable.themes_theme_circle).mutate();
+        gd.setColor(opaqueColor);
+        gd.setStroke(
+                Utils.dpToPx(this.mContext, 1),
+                ColorUtils.compositeColors(ContextCompat.getColor(this.mContext, R.color.color_circle_stroke_overlay), opaqueColor));
 
-        // draw border
-        int strokeWidth = Utils.dpToPx(this.mContext, 1);
-        int strokeColor = ColorUtils.compositeColors(ContextCompat.getColor(this.mContext, R.color.color_circle_stroke_overlay), opaqueColor);
-        gradientDrawable.setStroke(strokeWidth, strokeColor);
-
-        setCompoundDrawablesWithIntrinsicBounds(gradientDrawable, null, null, null);
+        setCompoundDrawablesWithIntrinsicBounds(gd, null, null, null);
     }
 
     public void setOnColorChangedListener(OnColorChangedListener listener) {
@@ -108,15 +107,12 @@ public class ThemeEditColorView extends AppCompatTextView implements View.OnClic
     @Override
     public void onColorSelected(int dialogId, int color) {
         int rgbColor = color & 0xFFFFFF;
-
         setColor(rgbColor);
-
         if (this.mListener != null) {
             this.mListener.onColorChanged(this, rgbColor);
         }
     }
 
     @Override
-    public void onDialogDismissed(int dialogId) {
-    }
+    public void onDialogDismissed(int dialogId) {}
 }

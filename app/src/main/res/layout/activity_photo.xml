@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.hieuld.reader.widget.ScrimInsetsFrameLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.hieuld.helium.widget.ScrimInsetsFrameLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scrim_layout"
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:insetForegroundColor="#0000">
-    <com.hieuld.reader.widget.PhotoViewDragToCloseFrame
+    <com.hieuld.helium.widget.PhotoViewDragToCloseFrame
         android:id="@+id/close_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:soundEffectsEnabled="false"/>
-    </com.hieuld.reader.widget.PhotoViewDragToCloseFrame>
+    </com.hieuld.helium.widget.PhotoViewDragToCloseFrame>
     <FrameLayout
         android:id="@+id/ui_container"
         android:layout_width="match_parent"
@@ -28,4 +28,4 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
     </FrameLayout>
-</com.hieuld.reader.widget.ScrimInsetsFrameLayout>
+</com.hieuld.helium.widget.ScrimInsetsFrameLayout>

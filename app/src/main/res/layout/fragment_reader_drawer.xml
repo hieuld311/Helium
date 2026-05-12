@@ -15,7 +15,7 @@
             android:layout_height="?attr/actionBarSize"
             app:tabGravity="fill"/>
     </FrameLayout>
-    <com.hieuld.reader.widget.LockedViewPager
+    <com.hieuld.helium.widget.LockedViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

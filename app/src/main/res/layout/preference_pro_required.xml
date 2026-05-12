@@ -14,7 +14,5 @@
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_pro_required"
         android:drawablePadding="32dp"
-        android:drawableStart="@drawable/ic_pro_required"
-        android:paddingStart="?android:attr/listPreferredItemPaddingLeft"
-        android:paddingEnd="?android:attr/listPreferredItemPaddingRight"/>
+        android:drawableStart="@drawable/ic_pro_required"/>
 </LinearLayout>

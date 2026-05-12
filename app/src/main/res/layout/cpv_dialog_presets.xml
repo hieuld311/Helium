@@ -7,7 +7,7 @@
         android:padding="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <com.jaredrummler.android.colorpicker.NestedGridView
+        <com.jaredrummler.android.colorpicker.ColorPickerView
             android:id="@+id/gridView"
             android:clickable="false"
             android:layout_width="match_parent"

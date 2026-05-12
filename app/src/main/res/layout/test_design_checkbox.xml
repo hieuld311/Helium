@@ -6,8 +6,7 @@
         android:id="@+id/test_checkbox_android_button_tint"
         android:background="?android:attr/colorBackground"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:buttonTint="@color/checkbox_themeable_attribute_color"/>
+        android:layout_height="wrap_content"/>
     <CheckBox
         android:id="@+id/test_checkbox_app_button_tint"
         android:background="?android:attr/colorBackground"

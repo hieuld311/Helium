@@ -10,6 +10,7 @@ public class Theme {
     public String name;
     public int textColor;
 
+    @Override
     public String toString() {
         return this.name;
     }

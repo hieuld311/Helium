@@ -9,14 +9,14 @@
         android:layout_height="1dp"
         android:layout_marginTop="8dp"/>
     <TextView
-        android:textAppearance="@android:style/TextAppearance.Material.Body2"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
         android:textColor="@color/app_secondary"
         android:id="@android:id/title"
+        android:paddingLeft="@dimen/preference_category_padding_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="?android:attr/listPreferredItemPaddingLeft"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="2dp"
-        android:paddingStart="@dimen/preference_category_padding_start"
-        android:layout_marginStart="?android:attr/listPreferredItemPaddingStart"
-        android:layout_marginEnd="?android:attr/listPreferredItemPaddingEnd"/>
+        android:layout_marginRight="?android:attr/listPreferredItemPaddingRight"
+        android:layout_marginBottom="2dp"/>
 </LinearLayout>

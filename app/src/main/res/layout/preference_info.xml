@@ -16,9 +16,7 @@
         android:paddingRight="?android:attr/listPreferredItemPaddingRight"
         android:paddingBottom="16dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="?android:attr/listPreferredItemPaddingLeft"
-        android:paddingEnd="?android:attr/listPreferredItemPaddingRight">
+        android:layout_height="wrap_content">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,7 +27,6 @@
             android:id="@android:id/summary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginStart="32dp"/>
+            android:layout_marginLeft="32dp"/>
     </LinearLayout>
 </LinearLayout>

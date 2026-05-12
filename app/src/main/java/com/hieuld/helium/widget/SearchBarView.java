@@ -53,6 +53,7 @@ public class SearchBarView extends NavigationTintedToolbar implements
         this.mQueryView.setId(R.id.search);
         this.mQueryView.setBackground(null);
 
+        // Khôi phục Constants thay cho magic number 268435459
         this.mQueryView.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI | EditorInfo.IME_ACTION_SEARCH);
         this.mQueryView.setInputType(InputType.TYPE_CLASS_TEXT);
 
@@ -62,7 +63,7 @@ public class SearchBarView extends NavigationTintedToolbar implements
         this.mQueryView.addTextChangedListener(this);
         this.mQueryView.setOnEditorActionListener(this);
 
-        addView(this.mQueryView, new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.MATCH_PARENT));
+        addView(this.mQueryView, new Toolbar.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         setContentInsetStartWithNavigation(0);
 
         if (attrs != null) {

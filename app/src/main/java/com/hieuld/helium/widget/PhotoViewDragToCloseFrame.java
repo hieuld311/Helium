@@ -10,8 +10,8 @@ import android.widget.FrameLayout;
 
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
-import com.github.chrisbanes.photoview.PhotoView;
 import com.hieuld.helium.util.Utils;
+import com.github.chrisbanes.photoview.PhotoView;
 
 public class PhotoViewDragToCloseFrame extends FrameLayout implements ValueAnimator.AnimatorUpdateListener {
     private static final float CLOSE_THRESHOLD = 0.5f;

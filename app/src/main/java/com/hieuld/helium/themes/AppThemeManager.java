@@ -18,40 +18,49 @@ public class AppThemeManager {
 
     private final Context mContext;
     private final SharedPreferences mPrefs;
+    private final int mSdkVersion;
 
     private AppThemeManager(Context context) {
-        this.mContext = context.getApplicationContext();
-        this.mPrefs = PreferenceManager.getDefaultSharedPreferences(this.mContext);
+        Context applicationContext = context.getApplicationContext();
+        this.mContext = applicationContext;
+        this.mPrefs = PreferenceManager.getDefaultSharedPreferences(applicationContext);
+        this.mSdkVersion = Build.VERSION.SDK_INT;
     }
 
-    private int getNightModeForPref(String mode) {
-        switch (mode) {
-            case VALUE_DARK:
-                return AppCompatDelegate.MODE_NIGHT_YES;
-            case VALUE_LIGHT:
-                return AppCompatDelegate.MODE_NIGHT_NO;
-            case VALUE_AUTO:
-            default:
-                // Android 10 (API 29) trở lên dùng FOLLOW_SYSTEM, các bản thấp hơn (API 26, 27, 28) dùng AUTO_BATTERY
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    return AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
-                } else {
-                    return AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
-                }
+    private AppThemeManager(Context context, int sdkVersion) {
+        this.mContext = context;
+        this.mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        this.mSdkVersion = sdkVersion;
+    }
+
+    private int getNightModeForPref(String pref) {
+        if (VALUE_DARK.equals(pref)) {
+            return AppCompatDelegate.MODE_NIGHT_YES;
         }
+        if (VALUE_LIGHT.equals(pref)) {
+            return AppCompatDelegate.MODE_NIGHT_NO;
+        }
+        return this.mSdkVersion >= 29
+                ? AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                : AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
+    }
+
+    private String getDefaultPrefValue() {
+        return this.mSdkVersion >= 21 ? VALUE_AUTO : VALUE_LIGHT;
     }
 
     public String getCurrentPrefValue() {
-        return this.mPrefs.getString(APP_THEME, VALUE_AUTO);
+        String val = this.mPrefs.getString(APP_THEME, getDefaultPrefValue());
+        return (this.mSdkVersion >= 21 || !VALUE_AUTO.equals(val)) ? val : VALUE_LIGHT;
     }
 
-    public void setTheme(String themeValue) {
-        this.mPrefs.edit().putString(APP_THEME, themeValue).apply();
-        apply(themeValue);
+    public void setTheme(String pref) {
+        this.mPrefs.edit().putString(APP_THEME, pref).apply();
+        apply(pref);
     }
 
-    private void apply(String themeValue) {
-        AppCompatDelegate.setDefaultNightMode(getNightModeForPref(themeValue));
+    private void apply(String pref) {
+        AppCompatDelegate.setDefaultNightMode(getNightModeForPref(pref));
     }
 
     public void apply() {
@@ -67,5 +76,9 @@ public class AppThemeManager {
             }
         }
         return sInstance;
+    }
+
+    public static AppThemeManager createForTest(Context context, int sdkVersion) {
+        return new AppThemeManager(context, sdkVersion);
     }
 }

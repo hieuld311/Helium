@@ -6,12 +6,12 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.hieuld.reader.widget.SystemBarsFrame
+        <com.hieuld.helium.widget.SystemBarsFrame
             android:id="@+id/content_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:systemBarsColor="#ff000000">
-            <com.hieuld.reader.widget.DisplayCutoutFrameLayout
+            <com.hieuld.helium.widget.DisplayCutoutFrameLayout
                 android:id="@+id/book_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
@@ -27,8 +27,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:indeterminate="true"/>
-        </com.hieuld.reader.widget.SystemBarsFrame>
-        <com.hieuld.reader.widget.SystemBarsFrame
+        </com.hieuld.helium.widget.SystemBarsFrame>
+        <com.hieuld.helium.widget.SystemBarsFrame
             android:id="@+id/toolbar_container"
             android:fitsSystemWindows="true"
             android:layout_width="match_parent"
@@ -74,8 +74,7 @@
                         android:orientation="horizontal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp">
+                        android:layout_marginLeft="10dp">
                         <TextView
                             android:textSize="12sp"
                             android:textColor="#ffff"
@@ -88,8 +87,7 @@
                             android:id="@+id/pageNumber"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginStart="8dp"/>
+                            android:layout_marginLeft="8dp"/>
                     </LinearLayout>
                 </LinearLayout>
                 <SeekBar
@@ -102,8 +100,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
-        </com.hieuld.reader.widget.SystemBarsFrame>
-        <com.hieuld.reader.widget.SystemBarsFrame
+        </com.hieuld.helium.widget.SystemBarsFrame>
+        <com.hieuld.helium.widget.SystemBarsFrame
             android:id="@+id/search_ui"
             android:fitsSystemWindows="true"
             android:layout_width="match_parent"
@@ -114,8 +112,8 @@
                 android:background="@color/reader_search_bg_color"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <com.hieuld.reader.widget.SearchBarView
-                    android:theme="@style/ThemeOverlay.Helium.DayNight.ActionBar"
+                <com.hieuld.helium.widget.SearchBarView
+                    android:theme="@style/ThemeOverlay.Lithium.DayNight.ActionBar"
                     android:id="@+id/search_bar"
                     android:background="@color/search_toolbar_color"
                     android:layout_width="match_parent"
@@ -145,12 +143,12 @@
                         android:divider="@null"/>
                 </FrameLayout>
             </LinearLayout>
-        </com.hieuld.reader.widget.SystemBarsFrame>
-        <com.hieuld.reader.widget.SystemBarsFrame
+        </com.hieuld.helium.widget.SystemBarsFrame>
+        <com.hieuld.helium.widget.SystemBarsFrame
             android:id="@+id/content_high_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <com.hieuld.reader.widget.DisplayCutoutFrameLayout
+            <com.hieuld.helium.widget.DisplayCutoutFrameLayout
                 android:id="@+id/content_high_cutout_frame"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -210,8 +208,8 @@
                         </androidx.cardview.widget.CardView>
                     </FrameLayout>
                 </RelativeLayout>
-            </com.hieuld.reader.widget.DisplayCutoutFrameLayout>
-        </com.hieuld.reader.widget.SystemBarsFrame>
+            </com.hieuld.helium.widget.DisplayCutoutFrameLayout>
+        </com.hieuld.helium.widget.SystemBarsFrame>
         <androidx.cardview.widget.CardView
             android:layout_gravity="end"
             android:orientation="vertical"
@@ -222,7 +220,7 @@
             android:layout_margin="8dp"
             app:cardCornerRadius="4dp"/>
     </FrameLayout>
-    <com.hieuld.reader.widget.ScrimInsetsFrameLayout
+    <com.hieuld.helium.widget.ScrimInsetsFrameLayout
         android:layout_gravity="end"
         android:id="@+id/drawer_scrim"
         android:background="@color/drawer_background_color"
@@ -232,9 +230,9 @@
         android:layout_height="match_parent"
         app:insetForegroundColor="@color/drawer_scrim_color">
         <fragment
-            android:name="com.hieuld.reader.ReaderDrawerFragment"
+            android:name="com.hieuld.helium.ReaderDrawerFragment"
             android:id="@+id/drawer"
             android:layout_width="@dimen/contents_drawer_width"
             android:layout_height="match_parent"/>
-    </com.hieuld.reader.widget.ScrimInsetsFrameLayout>
+    </com.hieuld.helium.widget.ScrimInsetsFrameLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

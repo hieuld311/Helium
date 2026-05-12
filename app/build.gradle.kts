@@ -4,11 +4,7 @@ plugins {
 
 android {
     namespace = "com.hieuld.helium"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.hieuld.helium"
@@ -19,7 +15,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
-
     }
 
     buildTypes {
@@ -32,8 +27,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
         buildConfig = true
@@ -52,6 +47,10 @@ dependencies {
     implementation(libs.androidx.viewpager2)
     implementation(libs.androidx.swiperefreshlayout)
 
+    implementation(libs.androidx.drawerlayout)
+    implementation(libs.androidx.viewpager)
+    implementation(libs.androidx.cardview)
+
     // Architecture
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
@@ -69,12 +68,6 @@ dependencies {
     implementation(libs.androidx.tracing)
     implementation(libs.androidx.print)
 
-    // Google Services & Google Drive API
-//    implementation(libs.google.play.auth)
-//    implementation(libs.google.play.base)
-//    implementation(libs.google.api.drive)
-//    implementation(libs.google.api.client.android)
-
     // Data execution
     implementation(libs.google.gson)
     implementation(libs.google.guava)
@@ -85,6 +78,7 @@ dependencies {
     implementation(libs.jsoup)
     implementation(libs.colorpicker)
     implementation(libs.photoview)
+    implementation(libs.androidx.fragment)
 
     // Testing
     testImplementation(libs.test.junit)

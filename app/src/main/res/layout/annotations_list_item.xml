@@ -23,8 +23,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginRight="8dp"
-                android:contentDescription="@null"
-                android:layout_marginEnd="8dp"/>
+                android:contentDescription="@null"/>
             <TextView
                 android:textSize="14sp"
                 android:textColor="?android:attr/textColorPrimary"

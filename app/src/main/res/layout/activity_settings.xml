@@ -8,5 +8,5 @@
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        class="com.hieuld.reader.SettingsActivity$PreferencesFragment"/>
+        class="com.hieuld.helium.SettingsActivity$PreferencesFragment"/>
 </LinearLayout>

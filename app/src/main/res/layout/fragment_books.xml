@@ -37,8 +37,7 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="16dp">
+                android:layout_height="wrap_content">
                 <TextView
                     android:textSize="18sp"
                     android:textColor="?android:attr/textColorPrimary"
@@ -57,11 +56,10 @@
                     android:layout_marginRight="8dp"
                     android:minWidth="0dp"
                     android:text="@string/new_category_banner_done"
-                    android:layout_marginEnd="8dp"
                     style="@style/Widget.MaterialComponents.Button.TextButton"/>
             </LinearLayout>
         </FrameLayout>
-        <com.hieuld.reader.widget.AutoFitRecyclerView
+        <com.hieuld.helium.widget.AutoFitRecyclerView
             android:scrollbarStyle="outsideOverlay"
             android:id="@+id/books"
             android:padding="5dp"

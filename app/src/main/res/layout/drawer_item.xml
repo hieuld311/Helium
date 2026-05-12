@@ -22,6 +22,5 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
         android:maxLines="1"
-        android:fontFamily="sans-serif-medium"
-        android:layout_marginStart="32dp"/>
+        android:fontFamily="sans-serif-medium"/>
 </LinearLayout>

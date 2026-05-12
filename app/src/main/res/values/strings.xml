@@ -289,7 +289,7 @@
     <string name="no_books_library_desc">We\'ll show your books here automatically. If we\'re missing something, tap Refresh.</string>
     <string name="no_books_library_refresh">Refresh</string>
     <string name="no_books_library_title">No books</string>
-    <string name="no_books_search">No results</string>
+    <string name="no_books_search">No results %1$s</string>
     <string name="no_such_book_error_message">This book couldn\'t be loaded because it doesn\'t exist in your library anymore.</string>
     <string name="no_such_book_error_ok">OK</string>
     <string name="no_voice_input_app">No app installed to handle voice input.</string>

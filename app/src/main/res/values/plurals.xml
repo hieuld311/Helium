@@ -5,6 +5,7 @@
         <item quantity="other">%1$d books added to %2$s.</item>
     </plurals>
     <plurals name="book_delete_dialog_title_multi">
+        <item quantity="one">Delete %1$d book?</item>
         <item quantity="other">Delete %1$d books?</item>
     </plurals>
     <plurals name="book_deleted">

@@ -41,7 +41,7 @@ public class NavigationTintedToolbar extends Toolbar {
         Resources.Theme theme = context.getTheme();
         TypedValue typedValue = new TypedValue();
 
-        if (theme.resolveAttribute(R.attr.colorControlNormal, typedValue, true)) {
+        if (theme.resolveAttribute(androidx.appcompat.R.attr.colorControlNormal, typedValue, true)) {
             this.mColorControlNormal = ContextCompat.getColor(context, typedValue.resourceId);
         }
         this.mColorFetched = true;
