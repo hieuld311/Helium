@@ -80,8 +80,8 @@
     <dimen name="abc_text_size_title_material_toolbar">20dp</dimen>
     <dimen name="action_bar_size">16dp</dimen>
     <dimen name="appcompat_dialog_background_inset">16dp</dimen>
-    <dimen name="bookshelf_cover_height">192.125dp</dimen>
-    <dimen name="bookshelf_cover_width">145dp</dimen>
+    <dimen name="bookshelf_cover_height">145.75dp</dimen>
+    <dimen name="bookshelf_cover_width">110dp</dimen>
     <dimen name="cardview_compat_inset_shadow">1dp</dimen>
     <dimen name="cardview_default_elevation">2dp</dimen>
     <dimen name="cardview_default_radius">2dp</dimen>

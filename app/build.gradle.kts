@@ -78,6 +78,7 @@ dependencies {
     implementation(libs.colorpicker)
     implementation(libs.photoview)
     implementation(libs.androidx.fragment)
+    implementation(libs.androidx.junit)
 
     // Testing
     testImplementation(libs.test.junit)
