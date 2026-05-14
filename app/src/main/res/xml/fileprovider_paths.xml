@@ -3,4 +3,7 @@
     <files-path
         name="feedback"
         path="feedback/"/>
+    <files-path
+        name="export"
+        path="export/"/>
 </paths>

@@ -49,6 +49,7 @@ import com.hieuld.helium.db.BooksTable;
 import com.hieuld.helium.db.CategoriesTable;
 import com.hieuld.helium.db.DatabaseProvider;
 import com.hieuld.helium.db.SyncBaseColumns;
+import com.hieuld.helium.export.ExportDataDialog;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Executor;
@@ -73,6 +74,7 @@ public class BooksFragment extends Fragment implements BooksAdapter.OnItemClickL
     public static final int FILTER_FOLDER = 2;
     public static final int FILTER_NONE = 0;
     private static final int PRELOAD_COVER_COUNT = 4;
+    private static final String EXPORT_DIALOG_TAG = "export_dialog";
     private static final String STATE_SELECTED_ITEM_IDS = "selected_item_ids";
     private static final String TAG = "BooksFragment";
 
@@ -665,6 +667,10 @@ public class BooksFragment extends Fragment implements BooksAdapter.OnItemClickL
         runQuery(false);
     }
 
+    private void showExportDialog(long bookId) {
+        ExportDataDialog.newInstance(bookId).show(getChildFragmentManager(), EXPORT_DIALOG_TAG);
+    }
+
     public static Fragment newInstance() {
         return new BooksFragment();
     }
@@ -763,14 +769,10 @@ public class BooksFragment extends Fragment implements BooksAdapter.OnItemClickL
                 BooksFragment.this.showDeleteBooksDialog(checkedItemIds);
                 return true;
             }
-// else if (itemId == R.id.export) {
-//     // Lưu ý: Hàm showExportDialog có thể nằm ở Context Activity hoặc fragment, do decompiler làm mất
-//     // Trong thực tế, bạn sẽ cần triển khai hàm showExportDialog(long id).
-//     if (getActivity() instanceof MainActivity) {
-//         ((MainActivity) getActivity()).showExportDialog(checkedItemIds.get(0));
-//     }
-//     return true;
-// }
+            else if (itemId == R.id.export) {
+                BooksFragment.this.showExportDialog(checkedItemIds.get(0));
+                return true;
+            }
             else if (itemId == R.id.remove_from_category) {
                 BooksFragment.this.showRemoveFromCategoryDialog(checkedItemIds);
                 return true;

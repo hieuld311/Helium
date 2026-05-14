@@ -9,8 +9,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -22,8 +20,9 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.view.ActionMode;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
@@ -36,6 +35,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.lifecycle.LifecycleOwner;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.hieuld.helium.db.BookCategoryLinksTable;
 import com.hieuld.helium.db.BooksTable;
 import com.hieuld.helium.db.DatabaseProvider;
@@ -52,118 +53,84 @@ import com.hieuld.helium.util.ThemeUtils;
 import com.hieuld.helium.util.Utils;
 import com.hieuld.helium.widget.ScrimInsetsFrameLayout;
 import com.hieuld.helium.widget.SearchBarView;
-import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class MainActivity extends BaseActivity implements MainDrawerFragment.Listener, SearchBarView.SearchBarListener, LibraryUpdate.Listener, AdapterView.OnItemClickListener {
+public class MainActivity extends BaseActivity implements
+        MainDrawerFragment.Listener,
+        SearchBarView.SearchBarListener,
+        LibraryUpdate.Listener,
+        AdapterView.OnItemClickListener {
+
+    private static final String TAG = "MainActivity";
     private static final String FRAGMENT_UPDATE_CONTROLLER = "update_controller";
     private static final int REQUEST_SEARCH_VOICE = 0;
-    private static final String TAG = "MainActivity";
 
+    // UI Components
     private View mContentView;
-    private boolean mCreateShortcut;
-    private MainDrawerFragment mDrawer;
     private DrawerLayout mDrawerLayout;
-    private Fragment mFragment;
-    private Handler mHandler;
-    private boolean mNoticeShown;
-    private SharedPreferences mPrefs;
-    private RecentSearchesAdapter mRecentSearchesAdapter;
+    private MainDrawerFragment mDrawer;
+    private SearchBarView mSearchBarView;
     private ListView mRecentSearchesListView;
     private Snackbar mRefreshSnackbar;
-    private SearchBarView mSearchBarView;
+
+    // State & Helpers
+    private Fragment mFragment;
+    private LibraryUpdateControllerFragment mUpdateControllerFragment;
+    private RecentSearchesAdapter mRecentSearchesAdapter;
     private SearchHistoryManager mSearchHistoryManager;
-    private String mSearchQuery;
+    private SharedPreferences mPrefs;
+    private Handler mHandler;
+    private AsyncHelper mAsync = new AsyncHelper();
+
+    // Variables
+    private boolean mCreateShortcut;
+    private boolean mNoticeShown;
     private boolean mSearchShown;
     private boolean mSearchSubmitted;
-    private LibraryUpdateControllerFragment mUpdateControllerFragment;
+    private String mSearchQuery;
     private Runnable mHideNoticeRunnable = this::hideNotice;
-    private AsyncHelper mAsync = new AsyncHelper();
 
     @Override
     protected void onCreate(Bundle bundle) {
         setTheme(R.style.Theme_Helium_WithStatusBar);
         super.onCreate(bundle);
-        setToolbarHasElevation(false);
-        setContentView(R.layout.activity_main);
-        setNoWindowBackground();
-        setDisplayUpButton(true);
-        getToolbar().setNavigationIcon(R.drawable.ic_action_hamburger);
-        ViewCompat.setElevation(findViewById(R.id.toolbar_container), Utils.dpToPx(this, 4));
-        this.mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        Intent intent = getIntent();
-        this.mCreateShortcut = intent != null && "android.intent.action.CREATE_SHORTCUT".equals(intent.getAction());
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        this.mDrawerLayout = drawerLayout;
-        drawerLayout.setStatusBarBackgroundColor(ContextCompat.getColor(this, R.color.app_primary_dark));
-        MainDrawerFragment mainDrawerFragment = (MainDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.drawer);
-        this.mDrawer = mainDrawerFragment;
-        mainDrawerFragment.setListener(this);
-        ((ScrimInsetsFrameLayout) findViewById(R.id.drawer_scrim)).setOnInsetsCallback(rect -> this.mDrawer.setInset(rect.top));
-        this.mContentView = findViewById(R.id.content);
-        SearchBarView searchBarView = (SearchBarView) findViewById(R.id.search_bar);
-        this.mSearchBarView = searchBarView;
-        searchBarView.setVisibility(View.GONE);
-        this.mSearchBarView.setListener(this);
-        this.mSearchBarView.addExtraMenuResource(R.menu.main_search, menuItem -> {
-            if (menuItem.getItemId() != R.id.select_all) {
-                return false;
-            }
-            searchSelectAll();
-            return true;
-        });
-        ListView listView = (ListView) findViewById(R.id.recent_searches);
-        this.mRecentSearchesListView = listView;
-        listView.setOnItemClickListener(this);
-        RecentSearchesAdapter recentSearchesAdapter = new RecentSearchesAdapter(this);
-        this.mRecentSearchesAdapter = recentSearchesAdapter;
-        this.mRecentSearchesListView.setAdapter((ListAdapter) recentSearchesAdapter);
-        this.mSearchHistoryManager = new SearchHistoryManager(DatabaseProvider.getDatabase(this), "main");
-        FragmentManager supportFragmentManager = getSupportFragmentManager();
-        supportFragmentManager.addOnBackStackChangedListener(() -> {
-            this.mFragment = getSupportFragmentManager().findFragmentById(R.id.content);
-            updateFragmentInfo();
-        });
-        LibraryUpdateControllerFragment libraryUpdateControllerFragment = (LibraryUpdateControllerFragment) supportFragmentManager.findFragmentByTag(FRAGMENT_UPDATE_CONTROLLER);
-        this.mUpdateControllerFragment = libraryUpdateControllerFragment;
-        if (libraryUpdateControllerFragment == null) {
-            this.mUpdateControllerFragment = new LibraryUpdateControllerFragment();
-            supportFragmentManager.beginTransaction().add(this.mUpdateControllerFragment, FRAGMENT_UPDATE_CONTROLLER).commitNow();
-        }
-        this.mHandler = new Handler();
-        if (bundle == null) {
-            int i = this.mPrefs.getInt("filter", 0);
-            if (i == 0) {
-                switchToFragment(BooksFragment.newInstance(), false);
-            } else if (i == 1) {
-                switchToFragment(BooksFragment.newCategoryInstance(this.mPrefs.getLong(BookCategoryLinksTable.COLUMN_CATEGORY_ID, -1L)), false);
-            } else if (i == 2) {
-                switchToFragment(BooksFragment.newFolderInstance(this.mPrefs.getString("folder", null)), false);
-            }
-        } else {
-            this.mFragment = getSupportFragmentManager().findFragmentById(R.id.content);
-            updateFragmentInfo();
-        }
-        if (this.mPrefs.getBoolean("open_last_book", false) && bundle == null && !this.mCreateShortcut) {
-            Cursor cursorQuery = DatabaseProvider.getDatabase(this).query(BooksTable.TABLE_NAME, new String[]{"_id"}, null, null, null, null, "last_open_date DESC", "1");
-            if (cursorQuery.moveToFirst()) {
-                startActivity(new Intent(this, ReaderActivity.class).putExtra("book_id", cursorQuery.getLong(0)));
-            }
-            cursorQuery.close();
-        }
-    }
 
-    private void searchSelectAll() {
-        Fragment fragment = this.mFragment;
-        if (fragment instanceof BooksFragment) {
-            ((BooksFragment) fragment).selectAll();
-        }
-    }
+        setupBaseUI();
+        initManagersAndViews();
+        setupSearchAndDrawer();
+        setupFragments(bundle);
+        handleShortcutIntent(bundle);
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Nếu Navigation Drawer đang mở -> Đóng nó
+                if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                }
+                // Nếu Thanh tìm kiếm đang hiển thị -> Ẩn nó
+                else if (mSearchShown) {
+                    hideSearchBar();
+                }
+                // Nếu có Fragment trong BackStack -> Pop nó ra
+                else if (getSupportFragmentManager().popBackStackImmediate((String) null, 1)) {
+                    // Đã pop fragment thành công, không cần làm gì thêm
+                }
+                // Nếu không rơi vào các trường hợp trên -> Thoát Activity (hành vi mặc định)
+                else {
+                    // Vô hiệu hóa callback này để tránh vòng lặp vô hạn
+                    setEnabled(false);
+                    // Gọi lại Dispatcher để thực hiện hành vi Back mặc định của hệ thống (thoát app)
+                    getOnBackPressedDispatcher().onBackPressed();
+
+                    // Lưu ý: Sau khi gọi lệnh trên, nếu bạn muốn callback này hoạt động lại cho lần
+                    // vào app tiếp theo (nếu Activity chưa bị destroy), bạn có thể set lại setEnabled(true).
+                    // Tuy nhiên với logic thoát app thì thường không cần.
+                }
+            }
+        });
     }
 
     @Override
@@ -185,44 +152,135 @@ public class MainActivity extends BaseActivity implements MainDrawerFragment.Lis
         }
     }
 
-    public void switchToFragment(Fragment fragment, boolean z) {
-        this.mFragment = fragment;
-        if (this.mCreateShortcut && (fragment instanceof BooksFragment)) {
-            ((BooksFragment) fragment).enablePickMode(j -> createShortcutForBook(j));
-        }
-        FragmentTransaction fragmentTransactionReplace = getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment);
-        if (z) {
-            fragmentTransactionReplace.addToBackStack("Entry");
-        }
-        fragmentTransactionReplace.commit();
-        updateFragmentInfo();
+    @Override
+    protected void onSaveInstanceState(Bundle bundle) {
+        super.onSaveInstanceState(bundle);
+        bundle.putBoolean("searchShown", this.mSearchShown);
     }
 
-    private void updateFragmentInfo() {
-        invalidateOptionsMenu();
-        this.mDrawer.setCurrentFragment(this.mFragment);
-        Fragment fragment = this.mFragment;
-        if (fragment instanceof BooksFragment) {
-            BooksFragment booksFragment = (BooksFragment) fragment;
-            Bundle arguments = booksFragment.getArguments();
-            SharedPreferences.Editor editorEdit = this.mPrefs.edit();
-            editorEdit.putInt("filter", booksFragment.getFilter());
-            if (arguments != null) {
-                if (booksFragment.getFilter() == 1) {
-                    editorEdit.putLong(BookCategoryLinksTable.COLUMN_CATEGORY_ID, arguments.getLong(BooksFragment.EXTRA_CATEGORY_ID));
-                } else if (booksFragment.getFilter() == 2) {
-                    editorEdit.putString("folder", arguments.getString("folder"));
-                }
+    @Override
+    protected void onRestoreInstanceState(Bundle bundle) {
+        if (bundle.getBoolean("searchShown")) {
+            this.mSearchShown = true;
+            this.mSearchBarView.setVisibility(View.VISIBLE);
+            this.mDrawerLayout.setStatusBarBackgroundColor(getSurfaceStatusBarColor());
+        }
+        super.onRestoreInstanceState(bundle);
+    }
+
+//    @Override
+//    public void onBackPressed() {
+//        if (this.mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+//            this.mDrawerLayout.closeDrawer(GravityCompat.START);
+//        } else if (this.mSearchShown) {
+//            hideSearchBar();
+//        } else {
+//            if (getSupportFragmentManager().popBackStackImmediate((String) null, 1)) {
+//                return;
+//            }
+//            super.onBackPressed();
+//        }
+//    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int i, int i2, Intent intent) {
+        ArrayList<String> stringArrayListExtra;
+        super.onActivityResult(i, i2, intent);
+        if (i != 0 || i2 != -1 || (stringArrayListExtra = intent.getStringArrayListExtra("android.speech.extra.RESULTS")) == null || stringArrayListExtra.size() <= 0) {
+            return;
+        }
+        this.mSearchBarView.setQueryAndSubmit(stringArrayListExtra.get(0));
+    }
+
+    // =========================================================================
+    // INITIALIZATION HELPERS
+    // =========================================================================
+
+    private void setupBaseUI() {
+        setToolbarHasElevation(false);
+        setContentView(R.layout.activity_main);
+        setNoWindowBackground();
+        setDisplayUpButton(true);
+        getToolbar().setNavigationIcon(R.drawable.ic_action_hamburger);
+        ViewCompat.setElevation(findViewById(R.id.toolbar_container), Utils.dpToPx(this, 4));
+
+        Intent intent = getIntent();
+        this.mCreateShortcut = intent != null && "android.intent.action.CREATE_SHORTCUT".equals(intent.getAction());
+        this.mHandler = new Handler();
+        this.mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+    }
+
+    private void initManagersAndViews() {
+        this.mContentView = findViewById(R.id.content);
+        this.mSearchHistoryManager = new SearchHistoryManager(DatabaseProvider.getDatabase(this), "main");
+
+        this.mRecentSearchesListView = findViewById(R.id.recent_searches);
+        this.mRecentSearchesListView.setOnItemClickListener(this);
+        this.mRecentSearchesAdapter = new RecentSearchesAdapter(this);
+        this.mRecentSearchesListView.setAdapter((ListAdapter) this.mRecentSearchesAdapter);
+    }
+
+    private void setupSearchAndDrawer() {
+        this.mDrawerLayout = findViewById(R.id.drawer_layout);
+        this.mDrawerLayout.setStatusBarBackgroundColor(ContextCompat.getColor(this, R.color.app_primary_dark));
+
+        this.mDrawer = (MainDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.drawer);
+        this.mDrawer.setListener(this);
+        ((ScrimInsetsFrameLayout) findViewById(R.id.drawer_scrim)).setOnInsetsCallback(rect -> this.mDrawer.setInset(rect.top));
+
+        this.mSearchBarView = findViewById(R.id.search_bar);
+        this.mSearchBarView.setVisibility(View.GONE);
+        this.mSearchBarView.setListener(this);
+        this.mSearchBarView.addExtraMenuResource(R.menu.main_search, menuItem -> {
+            if (menuItem.getItemId() != R.id.select_all) {
+                return false;
             }
-            editorEdit.apply();
+            searchSelectAll();
+            return true;
+        });
+    }
+
+    private void setupFragments(Bundle bundle) {
+        FragmentManager supportFragmentManager = getSupportFragmentManager();
+        supportFragmentManager.addOnBackStackChangedListener(() -> {
+            this.mFragment = getSupportFragmentManager().findFragmentById(R.id.content);
+            updateFragmentInfo();
+        });
+
+        this.mUpdateControllerFragment = (LibraryUpdateControllerFragment) supportFragmentManager.findFragmentByTag(FRAGMENT_UPDATE_CONTROLLER);
+        if (this.mUpdateControllerFragment == null) {
+            this.mUpdateControllerFragment = new LibraryUpdateControllerFragment();
+            supportFragmentManager.beginTransaction().add(this.mUpdateControllerFragment, FRAGMENT_UPDATE_CONTROLLER).commitNow();
+        }
+
+        if (bundle == null) {
+            int i = this.mPrefs.getInt("filter", 0);
+            if (i == 0) {
+                switchToFragment(BooksFragment.newInstance(), false);
+            } else if (i == 1) {
+                switchToFragment(BooksFragment.newCategoryInstance(this.mPrefs.getLong(BookCategoryLinksTable.COLUMN_CATEGORY_ID, -1L)), false);
+            } else if (i == 2) {
+                switchToFragment(BooksFragment.newFolderInstance(this.mPrefs.getString("folder", null)), false);
+            }
+        } else {
+            this.mFragment = getSupportFragmentManager().findFragmentById(R.id.content);
+            updateFragmentInfo();
         }
     }
 
-    public void refreshBooks(boolean z) {
-        if (z && !this.mNoticeShown) {
-            showNotice();
+    private void handleShortcutIntent(Bundle bundle) {
+        if (this.mPrefs.getBoolean("open_last_book", false) && bundle == null && !this.mCreateShortcut) {
+            Cursor cursorQuery = DatabaseProvider.getDatabase(this).query(BooksTable.TABLE_NAME, new String[]{"_id"}, null, null, null, null, "last_open_date DESC", "1");
+            if (cursorQuery.moveToFirst()) {
+                startActivity(new Intent(this, ReaderActivity.class).putExtra("book_id", cursorQuery.getLong(0)));
+            }
+            cursorQuery.close();
         }
-        this.mUpdateControllerFragment.startUpdate(z);
     }
 
     @Override
@@ -258,19 +316,64 @@ public class MainActivity extends BaseActivity implements MainDrawerFragment.Lis
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle bundle) {
-        super.onSaveInstanceState(bundle);
-        bundle.putBoolean("searchShown", this.mSearchShown);
+    public void onSupportActionModeStarted(ActionMode actionMode) {
+        super.onSupportActionModeStarted(actionMode);
+        this.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        if (this.mSearchShown && !ThemeUtils.isInDarkMode(this)) {
+            this.mSearchBarView.setSystemUiVisibility(0);
+        }
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle bundle) {
-        if (bundle.getBoolean("searchShown")) {
-            this.mSearchShown = true;
-            this.mSearchBarView.setVisibility(View.VISIBLE);
-            this.mDrawerLayout.setStatusBarBackgroundColor(ContextCompat.getColor(this, R.color.search_status_bar_color));
+    public void onSupportActionModeFinished(ActionMode actionMode) {
+        super.onSupportActionModeFinished(actionMode);
+        this.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        if (this.mSearchShown && !ThemeUtils.isInDarkMode(this)) {
+            this.mSearchBarView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); // 8192
         }
-        super.onRestoreInstanceState(bundle);
+    }
+
+    public void switchToFragment(Fragment fragment, boolean z) {
+        this.mFragment = fragment;
+        if (this.mCreateShortcut && (fragment instanceof BooksFragment)) {
+            ((BooksFragment) fragment).enablePickMode(j -> createShortcutForBook(j));
+        }
+        FragmentTransaction fragmentTransactionReplace = getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment);
+        if (z) {
+            fragmentTransactionReplace.addToBackStack("Entry");
+        }
+        fragmentTransactionReplace.commit();
+        updateFragmentInfo();
+    }
+
+    @Override
+    public void switchToFragment(Fragment fragment) {
+        if (fragment.getClass() == this.mFragment.getClass()) {
+            if (!(fragment instanceof FragmentComparison) || ((FragmentComparison) fragment).equalsFragment(this.mFragment)) {
+                return;
+            }
+        }
+        switchToFragment(fragment, true);
+    }
+
+    private void updateFragmentInfo() {
+        invalidateOptionsMenu();
+        this.mDrawer.setCurrentFragment(this.mFragment);
+        Fragment fragment = this.mFragment;
+        if (fragment instanceof BooksFragment) {
+            BooksFragment booksFragment = (BooksFragment) fragment;
+            Bundle arguments = booksFragment.getArguments();
+            SharedPreferences.Editor editorEdit = this.mPrefs.edit();
+            editorEdit.putInt("filter", booksFragment.getFilter());
+            if (arguments != null) {
+                if (booksFragment.getFilter() == 1) {
+                    editorEdit.putLong(BookCategoryLinksTable.COLUMN_CATEGORY_ID, arguments.getLong(BooksFragment.EXTRA_CATEGORY_ID));
+                } else if (booksFragment.getFilter() == 2) {
+                    editorEdit.putString("folder", arguments.getString("folder"));
+                }
+            }
+            editorEdit.apply();
+        }
     }
 
     private void showSearchBar() {
@@ -293,16 +396,15 @@ public class MainActivity extends BaseActivity implements MainDrawerFragment.Lis
         this.mSearchShown = true;
         this.mSearchBarView.activate();
         showRecentSearches();
-        if (Build.VERSION.SDK_INT >= 21) {
-            ObjectAnimator objectAnimatorOfArgb = ObjectAnimator.ofArgb(this.mDrawerLayout, "statusBarBackgroundColor", ContextCompat.getColor(this, R.color.app_primary_dark), ContextCompat.getColor(this, R.color.search_status_bar_color));
-            objectAnimatorOfArgb.setInterpolator(fastOutSlowInInterpolator);
-            objectAnimatorOfArgb.setDuration(275L);
-            objectAnimatorOfArgb.start();
+
+        ObjectAnimator objectAnimatorOfArgb = ObjectAnimator.ofArgb(this.mDrawerLayout, "statusBarBackgroundColor", ContextCompat.getColor(this, R.color.app_primary_dark), getSurfaceStatusBarColor());
+        objectAnimatorOfArgb.setInterpolator(fastOutSlowInInterpolator);
+        objectAnimatorOfArgb.setDuration(275L);
+        objectAnimatorOfArgb.start();
+
+        if (!ThemeUtils.isInDarkMode(this)) {
+            this.mSearchBarView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); // 8192
         }
-        if (Build.VERSION.SDK_INT < 23 || ThemeUtils.isInDarkMode(this)) {
-            return;
-        }
-        this.mSearchBarView.setSystemUiVisibility(8192);
     }
 
     private void hideSearchBar() {
@@ -329,16 +431,15 @@ public class MainActivity extends BaseActivity implements MainDrawerFragment.Lis
             }
             this.mSearchBarView.deactivate();
             hideRecentSearches();
-            if (Build.VERSION.SDK_INT >= 21) {
-                ObjectAnimator objectAnimatorOfArgb = ObjectAnimator.ofArgb(this.mDrawerLayout, "statusBarBackgroundColor", ContextCompat.getColor(this, R.color.search_status_bar_color), ContextCompat.getColor(this, R.color.app_primary_dark));
-                objectAnimatorOfArgb.setInterpolator(fastOutSlowInInterpolator);
-                objectAnimatorOfArgb.setDuration(275L);
-                objectAnimatorOfArgb.start();
+
+            ObjectAnimator objectAnimatorOfArgb = ObjectAnimator.ofArgb(this.mDrawerLayout, "statusBarBackgroundColor", getSurfaceStatusBarColor(), ContextCompat.getColor(this, R.color.app_primary_dark));
+            objectAnimatorOfArgb.setInterpolator(fastOutSlowInInterpolator);
+            objectAnimatorOfArgb.setDuration(275L);
+            objectAnimatorOfArgb.start();
+
+            if (!ThemeUtils.isInDarkMode(this)) {
+                this.mSearchBarView.setSystemUiVisibility(0);
             }
-            if (Build.VERSION.SDK_INT < 23 || ThemeUtils.isInDarkMode(this)) {
-                return;
-            }
-            this.mSearchBarView.setSystemUiVisibility(0);
         }
     }
 
@@ -359,19 +460,15 @@ public class MainActivity extends BaseActivity implements MainDrawerFragment.Lis
         }).start();
     }
 
-    @Override
-    public void onDrawerItemClicked() {
-        this.mDrawerLayout.closeDrawer(GravityCompat.START);
+    private int getSurfaceStatusBarColor() {
+        return ThemeUtils.resolveColor(this, R.attr.surfaceStatusBarColor, R.color.helium_surface_status_bar_light);
     }
 
-    @Override
-    public void switchToFragment(Fragment fragment) {
-        if (fragment.getClass() == this.mFragment.getClass()) {
-            if (!(fragment instanceof FragmentComparison) || ((FragmentComparison) fragment).equalsFragment(this.mFragment)) {
-                return;
-            }
+    private void searchSelectAll() {
+        Fragment fragment = this.mFragment;
+        if (fragment instanceof BooksFragment) {
+            ((BooksFragment) fragment).selectAll();
         }
-        switchToFragment(fragment, true);
     }
 
     private void showNotice() {
@@ -389,20 +486,88 @@ public class MainActivity extends BaseActivity implements MainDrawerFragment.Lis
         this.mNoticeShown = false;
     }
 
-    @Override
-    public void onBackPressed() {
-        if (this.mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            this.mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else if (this.mSearchShown) {
-            hideSearchBar();
-        } else {
-            if (getSupportFragmentManager().popBackStackImmediate((String) null, 1)) {
-                return;
-            }
-            super.onBackPressed();
+    // =========================================================================
+    // SYSTEM / CONTENT HELPERS
+    // =========================================================================
+
+    public void refreshBooks(boolean z) {
+        if (z && !this.mNoticeShown) {
+            showNotice();
+        }
+        this.mUpdateControllerFragment.startUpdate(z);
+    }
+
+    private void refreshBooksList() {
+        Fragment fragment = this.mFragment;
+        if (fragment instanceof BooksFragment) {
+            ((BooksFragment) fragment).refresh();
         }
     }
 
+    public void refreshDrawer() {
+        this.mDrawer.refresh();
+    }
+
+    public MainDrawerFragment getDrawerFragment() {
+        return this.mDrawer;
+    }
+
+    public void createShortcutForBook(final long j) {
+        this.mAsync.run(new PrepareBookShortcutDetailsTask(this, j, Utils.dpToPx(this, 48)), bookShortcutDetails -> {
+            if (!bookShortcutDetails.success) {
+                Log.e(TAG, "Shortcut not added.");
+                return;
+            }
+            Intent intentPutExtra = new Intent(this, ReaderActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setAction("android.intent.action.VIEW").putExtra("book_id", j).putExtra(ReaderActivity.EXTRA_LAUNCH_SOURCE, ReaderActivity.LAUNCH_SOURCE_WIDGET_SHORTCUT);
+            ShortcutInfoCompat.Builder builder = new ShortcutInfoCompat.Builder(this, "book_" + j);
+            builder.setLongLabel(bookShortcutDetails.title);
+            builder.setShortLabel(bookShortcutDetails.title);
+            if (bookShortcutDetails.cover != null) {
+                builder.setIcon(IconCompat.createWithBitmap(bookShortcutDetails.cover));
+            } else {
+                builder.setIcon(IconCompat.createWithResource(this, R.drawable.ic_app_shortcut_no_cover));
+            }
+            builder.setIntent(intentPutExtra);
+            setResult(-1, ShortcutManagerCompat.createShortcutResultIntent(this, builder.build()));
+            finish();
+        });
+    }
+
+    // --- MainDrawerFragment.Listener ---
+    @Override
+    public void onDrawerItemClicked() {
+        this.mDrawerLayout.closeDrawer(GravityCompat.START);
+    }
+
+    public void onFragmentInvalid() {
+        this.mHandler.post(() -> {
+            Fragment fragmentNewInstance = BooksFragment.newInstance();
+            getSupportFragmentManager().popBackStackImmediate((String) null, 1);
+            switchToFragment(fragmentNewInstance, false);
+        });
+    }
+
+    public void onFragmentInvalidatedDrawer() {
+        this.mDrawer.refresh();
+    }
+
+    public void onFragmentRedirect(Fragment fragment) {
+        switchToFragment(fragment);
+    }
+
+    public void onFragmentForceRefresh() {
+        refreshBooks(true);
+    }
+
+    public void onFragmentSubmitSearch() {
+        if (this.mSearchSubmitted) {
+            return;
+        }
+        this.mSearchSubmitted = true;
+        this.mSearchHistoryManager.submitQuery(this.mSearchQuery);
+    }
+
+    // --- SearchBarView.SearchBarListener ---
     @Override
     public void onSearchBack() {
         hideSearchBar();
@@ -453,100 +618,7 @@ public class MainActivity extends BaseActivity implements MainDrawerFragment.Lis
         }
     }
 
-    @Override
-    protected void onActivityResult(int i, int i2, Intent intent) {
-        ArrayList<String> stringArrayListExtra;
-        super.onActivityResult(i, i2, intent);
-        if (i != 0 || i2 != -1 || (stringArrayListExtra = intent.getStringArrayListExtra("android.speech.extra.RESULTS")) == null || stringArrayListExtra.size() <= 0) {
-            return;
-        }
-        this.mSearchBarView.setQueryAndSubmit(stringArrayListExtra.get(0));
-    }
-
-    private void refreshBooksList() {
-        Fragment fragment = this.mFragment;
-        if (fragment instanceof BooksFragment) {
-            ((BooksFragment) fragment).refresh();
-        }
-    }
-
-    public void refreshDrawer() {
-        this.mDrawer.refresh();
-    }
-
-    public MainDrawerFragment getDrawerFragment() {
-        return this.mDrawer;
-    }
-
-    @Override
-    public void onSupportActionModeStarted(ActionMode actionMode) {
-        super.onSupportActionModeStarted(actionMode);
-        this.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        if (!this.mSearchShown || Build.VERSION.SDK_INT < 23 || ThemeUtils.isInDarkMode(this)) {
-            return;
-        }
-        this.mSearchBarView.setSystemUiVisibility(0);
-    }
-
-    @Override
-    public void onSupportActionModeFinished(ActionMode actionMode) {
-        super.onSupportActionModeFinished(actionMode);
-        this.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        if (!this.mSearchShown || Build.VERSION.SDK_INT < 23 || ThemeUtils.isInDarkMode(this)) {
-            return;
-        }
-        this.mSearchBarView.setSystemUiVisibility(8192);
-    }
-
-    public void createShortcutForBook(final long j) {
-        this.mAsync.run(new PrepareBookShortcutDetailsTask(this, j, Utils.dpToPx(this, 48)), bookShortcutDetails -> {
-            if (!bookShortcutDetails.success) {
-                Log.e(TAG, "Shortcut not added.");
-                return;
-            }
-            Intent intentPutExtra = new Intent(this, ReaderActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setAction("android.intent.action.VIEW").putExtra("book_id", j).putExtra(ReaderActivity.EXTRA_LAUNCH_SOURCE, ReaderActivity.LAUNCH_SOURCE_WIDGET_SHORTCUT);
-            ShortcutInfoCompat.Builder builder = new ShortcutInfoCompat.Builder(this, "book_" + j);
-            builder.setLongLabel(bookShortcutDetails.title);
-            builder.setShortLabel(bookShortcutDetails.title);
-            if (bookShortcutDetails.cover != null) {
-                builder.setIcon(IconCompat.createWithBitmap(bookShortcutDetails.cover));
-            } else {
-                builder.setIcon(IconCompat.createWithResource(this, R.drawable.ic_app_shortcut_no_cover));
-            }
-            builder.setIntent(intentPutExtra);
-            setResult(-1, ShortcutManagerCompat.createShortcutResultIntent(this, builder.build()));
-            finish();
-        });
-    }
-
-    public void onFragmentInvalid() {
-        this.mHandler.post(() -> {
-            Fragment fragmentNewInstance = BooksFragment.newInstance();
-            getSupportFragmentManager().popBackStackImmediate((String) null, 1);
-            switchToFragment(fragmentNewInstance, false);
-        });
-    }
-
-    public void onFragmentInvalidatedDrawer() {
-        this.mDrawer.refresh();
-    }
-
-    public void onFragmentRedirect(Fragment fragment) {
-        switchToFragment(fragment);
-    }
-
-    public void onFragmentForceRefresh() {
-        refreshBooks(true);
-    }
-
-    public void onFragmentSubmitSearch() {
-        if (this.mSearchSubmitted) {
-            return;
-        }
-        this.mSearchSubmitted = true;
-        this.mSearchHistoryManager.submitQuery(this.mSearchQuery);
-    }
-
+    // --- LibraryUpdate.Listener ---
     @Override
     public void onLibraryUpdateFoundBook() {
         if (this.mNoticeShown) {
@@ -593,6 +665,7 @@ public class MainActivity extends BaseActivity implements MainDrawerFragment.Lis
         }
     }
 
+    // --- AdapterView.OnItemClickListener ---
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
         if (adapterView == this.mRecentSearchesListView) {

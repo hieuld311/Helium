@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
     <LinearLayout
         android:orientation="vertical"
-        android:background="@color/book_list_background_color"
+        android:background="?attr/bookListBackgroundColor"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <FrameLayout
@@ -18,10 +18,10 @@
             <com.hieuld.helium.widget.SearchBarView
                 android:theme="@style/ThemeOverlay.Helium.DayNight.ActionBar"
                 android:id="@+id/search_bar"
-                android:background="@color/search_toolbar_color"
+                android:background="?attr/searchBarColor"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:hint="@string/book_search_hint"
+                app:hint="@string/book_search_hint"
                 style="@style/Widget.MaterialComponents.Toolbar.Surface"/>
         </FrameLayout>
         <FrameLayout
@@ -48,11 +48,11 @@
         android:layout_gravity="start"
         android:orientation="vertical"
         android:id="@+id/drawer_scrim"
-        android:background="@color/drawer_background_color"
+        android:background="?attr/drawerBackgroundColor"
         android:fitsSystemWindows="true"
         android:layout_width="@dimen/drawer_width"
         android:layout_height="match_parent"
-        app:insetForeground="@color/drawer_scrim_color">
+        app:insetForegroundColor="@color/drawer_scrim_color">
         <fragment
             android:name="com.hieuld.helium.MainDrawerFragment"
             android:id="@+id/drawer"

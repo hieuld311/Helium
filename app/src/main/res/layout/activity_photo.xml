@@ -4,7 +4,7 @@
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:insetForeground="#0000">
+    app:insetForegroundColor="#0000">
     <com.hieuld.helium.widget.PhotoViewDragToCloseFrame
         android:id="@+id/close_frame"
         android:layout_width="match_parent"

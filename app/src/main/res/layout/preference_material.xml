@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="-4dp"
         android:minWidth="60dp">
-        <androidx.appcompat.widget.AppCompatImageView
+        <androidx.preference.internal.PreferenceImageView
             android:id="@android:id/icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1">
         <TextView
-            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textAppearance="@style/Preference_TextAppearanceMaterialSubhead"
             android:ellipsize="marquee"
             android:id="@android:id/title"
             android:layout_width="wrap_content"

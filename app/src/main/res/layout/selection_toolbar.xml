@@ -106,7 +106,7 @@
                 <com.hieuld.helium.widget.ConstrainedContainerView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:maxHeight="150dp">
+                    app:maxViewHeight="150dp">
                     <ScrollView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">

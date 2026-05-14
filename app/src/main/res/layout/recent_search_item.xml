@@ -12,4 +12,4 @@
     android:drawableLeft="@drawable/ic_recent_search"
     android:drawablePadding="32dp"
     android:drawableStart="@drawable/ic_recent_search"
-    app:drawableTint="@color/search_recent_icon_tint"/>
+    app:drawableTint="?attr/colorControlNormal"/>

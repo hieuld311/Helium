@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Base.Theme.Helium" parent="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
-        <item name="android:colorBackground">@color/color_surface</item>
+        <item name="android:colorBackground">@color/helium_book_list_background_light</item>
         <item name="actionBarPopupTheme">@style/ThemeOverlay.Helium.DayNight.ActionBarPopup</item>
         <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
         <item name="actionModeCloseDrawable">@drawable/ic_close_white</item>
         <item name="actionModeStyle">@style/Widget.Helium.ActionMode</item>
         <item name="alertDialogTheme">@style/AlertDialog.Helium</item>
+        <item name="android:navigationBarColor">@color/helium_navigation_bar_light</item>
+        <item name="bookListBackgroundColor">@color/helium_book_list_background_light</item>
         <item name="checkboxStyle">@style/Widget.Helium.CheckBox</item>
         <item name="colorAccent">@color/app_secondary</item>
         <item name="colorPrimary">@color/app_primary</item>
         <item name="colorPrimaryDark">@color/app_primary_dark</item>
-        <item name="colorSurface">@color/color_surface</item>
+        <item name="colorSurface">@color/helium_surface_light</item>
+        <item name="drawerBackgroundColor">@color/helium_drawer_background_light</item>
+        <item name="navigationBarColor">@color/helium_navigation_bar_light</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlayFixed</item>
         <item name="radioButtonStyle">@style/Widget.Helium.RadioButton</item>
+        <item name="searchBarColor">@color/helium_search_bar_light</item>
+        <item name="surfaceStatusBarColor">@color/helium_surface_status_bar_light</item>
         <item name="textAppearanceButton">@style/TextAppearance.Helium.Button</item>
         <item name="windowActionBar">false</item>
         <item name="windowActionModeOverlay">true</item>
@@ -24,7 +30,7 @@
     <style name="Theme.Helium" parent="@style/Base.Theme.Helium" />
 
     <style name="Theme.Helium.Launch" parent="@style/Theme.Helium">
-        <item name="android:colorBackground">@color/book_list_background_color</item>
+        <item name="android:colorBackground">@color/helium_book_list_background_light</item>
         <item name="android:windowNoTitle">false</item>
         <item name="android:windowTitleSize">?attr/actionBarSize</item>
         <item name="android:windowTitleStyle">@style/LaunchWindowTitle</item>
@@ -53,21 +59,25 @@
     <style name="Theme.Helium.WithStatusBar" parent="@style/Theme.Helium" />
 
     <style name="AlertDialog.Helium" parent="@style/Theme.MaterialComponents.DayNight.Dialog.Alert">
-        <item name="android:colorBackground">@color/color_surface</item>
+        <item name="android:colorBackground">@color/helium_surface_light</item>
         <item name="colorAccent">@color/app_secondary</item>
         <item name="colorPrimary">@color/app_primary</item>
-        <item name="colorSurface">@color/color_surface</item>
+        <item name="colorSurface">@color/helium_surface_light</item>
         <item name="dialogCornerRadius">4dp</item>
         <item name="textAppearanceButton">@style/TextAppearance.Helium.Button</item>
     </style>
 
-    <style name="Base.ThemeOverlay.Helium.DayNight" parent="@style/ThemeOverlay.MaterialComponents.Light">
+    <style name="ThemeOverlay.Helium.DayNight.Base" parent="@style/ThemeOverlay.MaterialComponents.Light">
         <item name="colorAccent">@color/app_secondary</item>
         <item name="colorPrimary">@color/app_primary</item>
         <item name="colorPrimaryDark">@color/app_primary_dark</item>
     </style>
 
-    <style name="ThemeOverlay.Helium.DayNight" parent="@style/Base.ThemeOverlay.Helium.DayNight" />
+    <style name="ThemeOverlay.Helium.DayNight" parent="@style/ThemeOverlay.Helium.DayNight.Base" tools:ignore="ResourceCycle">
+        <item name="android:colorBackground">@color/helium_surface_light</item>
+        <item name="colorSurface">@color/helium_surface_light</item>
+        <item name="searchBarColor">@color/helium_search_bar_light</item>
+    </style>
 
     <style name="ThemeOverlay.Helium.DayNight.ActionBar" parent="@style/ThemeOverlay.Helium.DayNight">
         <item name="colorControlNormal">?android:attr/textColorPrimary</item>
@@ -117,6 +127,8 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+    <style name="Widget.MaterialComponents.Toolbar.PrimarySurface" parent="@style/Widget.MaterialComponents.Toolbar.Primary" />
+
     <style name="LaunchWindowTitle" parent="">
         <item name="android:visibility">invisible</item>
     </style>
@@ -131,6 +143,20 @@
 
     <style name="PreferenceCategoryFixed" parent="@style/Preference.Category.Material">
         <item name="layout">@layout/preference_category_material_fixed</item>
+    </style>
+
+    <style name="Preference_TextAppearanceMaterialBody2">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="Preference_TextAppearanceMaterialSubhead">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:fontFamily">sans-serif</item>
     </style>
 
     <style name="DisplaySettingsHeader" parent="">
@@ -154,6 +180,14 @@
         <item name="lineHeight">?attr/themeLineHeight</item>
     </style>
 
+    <style name="TestStyleWithLineHeight" parent="@style/TestStyleWithoutLineHeight">
+        <item name="lineHeight">@dimen/material_text_view_test_line_height</item>
+    </style>
+
+    <style name="TestStyleWithLineHeightAppearance">
+        <item name="android:textAppearance">@style/TestStyleWithLineHeight</item>
+    </style>
+
     <style name="TestStyleWithoutLineHeight" parent="@style/TextAppearance.AppCompat.Title">
         <item name="android:textSize">20sp</item>
     </style>
@@ -163,6 +197,11 @@
         <item name="android:textColor">?android:attr/textColorSecondary</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="cpv_ColorPickerViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">315dp</item>
     </style>
 
 </resources>

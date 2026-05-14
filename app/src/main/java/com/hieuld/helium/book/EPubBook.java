@@ -261,21 +261,21 @@ public class EPubBook extends Book {
                     if ("rtl".equalsIgnoreCase(dir)) {
                         this.mPageDirection = Book.DIRECTION_RTL;
                     }
-                } else if ("metadata/title".equals(path) || "metadata/dc:title".equals(path)) {
+                } else if ("package/metadata/title".equals(path)) {
                     if (TextUtils.isEmpty(this.mTitle)) {
                         this.mTitle = parser.nextText();
                     }
-                } else if ("metadata/creator".equals(path) || "metadata/dc:creator".equals(path)) {
+                } else if ("package/metadata/creator".equals(path)) {
                     if (TextUtils.isEmpty(this.mCreator)) {
                         this.mCreator = parser.nextText();
                     }
-                } else if ("metadata/language".equals(path) || "metadata/dc:language".equals(path)) {
+                } else if ("package/metadata/language".equals(path)) {
                     this.mLanguage = parser.nextText();
-                } else if ("metadata/meta".equals(path)) {
+                } else if ("package/metadata/meta".equals(path)) {
                     String name = parser.getAttributeValue(null, "name");
                     String property = parser.getAttributeValue(null, "property");
                     String content = parser.getAttributeValue(null, "content");
-                    String text = parser.nextText();
+                    String text = parser.isEmptyElementTag() ? null : parser.nextText();
                     if (TextUtils.isEmpty(text)) {
                         text = content;
                     }
@@ -296,7 +296,7 @@ public class EPubBook extends Book {
                             this.mRendition.extend(Rendition.withFlowStyle(1));
                         }
                     }
-                } else if ("manifest/item".equals(path)) {
+                } else if ("package/manifest/item".equals(path)) {
                     ManifestEntry manifestEntry = new ManifestEntry();
                     manifestEntry.id = parser.getAttributeValue(null, "id");
                     manifestEntry.mediaType = parser.getAttributeValue(null, "media-type");
@@ -329,7 +329,7 @@ public class EPubBook extends Book {
                     if ("application/x-dtbncx+xml".equals(manifestEntry.mediaType)) {
                         ncxHref = manifestEntry.href;
                     }
-                } else if ("spine".equals(path)) {
+                } else if ("package/spine".equals(path)) {
                     String toc = parser.getAttributeValue(null, "toc");
                     if (!TextUtils.isEmpty(toc)) {
                         ManifestEntry entryToc = this.mManifestEntries.get(toc);
@@ -343,7 +343,7 @@ public class EPubBook extends Book {
                     } else if ("ltr".equalsIgnoreCase(direction)) {
                         this.mPageDirection = Book.DIRECTION_LTR;
                     }
-                } else if ("spine/itemref".equals(path)) {
+                } else if ("package/spine/itemref".equals(path)) {
                     String idref = parser.getAttributeValue(null, "idref");
                     if (!TextUtils.isEmpty(idref)) {
                         this.mSpineItemRefs.add(idref);
@@ -370,7 +370,7 @@ public class EPubBook extends Book {
                             this.mItemRenditionMap.put(idref, rendition);
                         }
                     }
-                } else if ("guide/reference".equals(path)) {
+                } else if ("package/guide/reference".equals(path)) {
                     String type = parser.getAttributeValue(null, "type");
                     String href = parser.getAttributeValue(null, "href");
 

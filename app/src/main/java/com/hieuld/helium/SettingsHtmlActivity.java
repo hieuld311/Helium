@@ -2,7 +2,6 @@ package com.hieuld.helium;
 
 import android.os.Bundle;
 import android.webkit.WebView;
-import androidx.core.content.ContextCompat;
 import com.hieuld.helium.util.ThemeUtils;
 
 public class SettingsHtmlActivity extends BaseActivity {
@@ -16,7 +15,7 @@ public class SettingsHtmlActivity extends BaseActivity {
         setTitle(getIntent().getIntExtra(EXTRA_TITLE_ID, -1));
         setDisplayUpButton(true);
         WebView webView = (WebView) findViewById(R.id.web_view);
-        webView.setBackgroundColor(ContextCompat.getColor(this, R.color.color_surface));
+        webView.setBackgroundColor(ThemeUtils.resolveColor(this, com.google.android.material.R.attr.colorSurface, R.color.helium_surface_light));
         webView.getSettings().setJavaScriptEnabled(true);
         String str = "file:///android_asset/" + getIntent().getStringExtra(EXTRA_FILE) + ".html";
         if (ThemeUtils.isInDarkMode(this)) {

@@ -6,11 +6,12 @@
 -->
 <resources>
 
-    <!-- ────── ScrimInsetsFrameLayout ────── -->
+    <!-- ScrimInsetsFrameLayout -->
     <attr name="insetForeground" format="reference|color" />
+    <attr name="insetForegroundColor" format="reference|color" />
 
     <declare-styleable name="ScrimInsetsView">
-        <attr name="insetForeground" />
+        <attr name="insetForegroundColor" />
     </declare-styleable>
 
     <!-- ────── DisplayCutoutFrameLayout ────── -->
@@ -34,26 +35,35 @@
         <attr name="highlightColors" format="reference" />
     </declare-styleable>
 
-    <!-- ────── ConstrainedContainerView ────── -->
+    <!-- ConstrainedContainerView -->
+    <attr name="maxViewHeight" format="reference|dimension" />
+
     <declare-styleable name="ConstrainedContainerView">
-        <attr name="maxHeight" format="dimension" />
+        <attr name="maxViewHeight" />
     </declare-styleable>
 
-    <!-- ────── SearchBarView ────── -->
+    <!-- SearchBarView -->
+    <attr name="hint" format="reference|string" />
+
     <declare-styleable name="SearchBarView">
-        <attr name="android:hint" />
+        <attr name="hint" />
     </declare-styleable>
 
     <!-- ────── SystemBarsFrame ────── -->
     <declare-styleable name="SystemBarsFrame">
-        <attr name="systemBarsColor" format="color" />
+        <attr name="systemBarsColor" format="reference|color" />
         <attr name="doInsetTop" format="boolean" />
         <attr name="doInsetBottom" format="boolean" />
     </declare-styleable>
 
     <!-- ────── Theme color attrs used in app themes ────── -->
+    <attr name="bookListBackgroundColor" format="reference|color" />
+    <attr name="drawerBackgroundColor" format="reference|color" />
+    <attr name="navigationBarColor" format="reference|color" />
     <attr name="readerBackground" format="color" />
     <attr name="readerForeground" format="color" />
+    <attr name="searchBarColor" format="reference|color" />
+    <attr name="surfaceStatusBarColor" format="reference|color" />
 
     <!-- Theme line height -->
     <attr name="themeLineHeight" format="dimension" />

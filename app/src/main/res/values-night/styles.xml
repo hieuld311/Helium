@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="ThemeOverlay.AppCompat.DayNight" parent="@style/ThemeOverlay.AppCompat.Dark" />
+
+    <style name="Base.Theme.Helium" parent="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="android:colorBackground">@color/helium_book_list_background_dark</item>
+        <item name="actionBarPopupTheme">@style/ThemeOverlay.Helium.DayNight.ActionBarPopup</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
+        <item name="actionModeCloseDrawable">@drawable/ic_close_white</item>
+        <item name="actionModeStyle">@style/Widget.Helium.ActionMode</item>
+        <item name="alertDialogTheme">@style/AlertDialog.Helium</item>
+        <item name="android:navigationBarColor">@color/helium_navigation_bar_dark</item>
+        <item name="bookListBackgroundColor">@color/helium_book_list_background_dark</item>
+        <item name="checkboxStyle">@style/Widget.Helium.CheckBox</item>
+        <item name="colorAccent">@color/app_secondary</item>
+        <item name="colorPrimary">@color/app_primary</item>
+        <item name="colorPrimaryDark">@color/app_primary_dark</item>
+        <item name="colorSurface">@color/helium_surface_dark</item>
+        <item name="drawerBackgroundColor">@color/helium_drawer_background_dark</item>
+        <item name="navigationBarColor">@color/helium_navigation_bar_dark</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlayFixed</item>
+        <item name="radioButtonStyle">@style/Widget.Helium.RadioButton</item>
+        <item name="searchBarColor">@color/helium_search_bar_dark</item>
+        <item name="surfaceStatusBarColor">@color/helium_surface_status_bar_dark</item>
+        <item name="textAppearanceButton">@style/TextAppearance.Helium.Button</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Helium.Launch" parent="@style/Theme.Helium">
+        <item name="android:colorBackground">@color/helium_book_list_background_dark</item>
+        <item name="android:windowNoTitle">false</item>
+        <item name="android:windowTitleSize">?attr/actionBarSize</item>
+        <item name="android:windowTitleStyle">@style/LaunchWindowTitle</item>
+        <item name="android:windowTitleBackgroundStyle">@style/LaunchWindowTitleBackground</item>
+    </style>
+
+    <style name="AlertDialog.Helium" parent="@style/Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="android:colorBackground">@color/helium_surface_dark</item>
+        <item name="colorAccent">@color/app_secondary</item>
+        <item name="colorPrimary">@color/app_primary</item>
+        <item name="colorSurface">@color/helium_surface_dark</item>
+        <item name="dialogCornerRadius">4dp</item>
+        <item name="textAppearanceButton">@style/TextAppearance.Helium.Button</item>
+    </style>
+
+    <style name="ThemeOverlay.Helium.DayNight.Base" parent="@style/ThemeOverlay.MaterialComponents.Dark">
+        <item name="colorAccent">@color/app_secondary</item>
+        <item name="colorPrimary">@color/app_primary</item>
+        <item name="colorPrimaryDark">@color/app_primary_dark</item>
+    </style>
+
+    <style name="ThemeOverlay.Helium.DayNight" parent="@style/ThemeOverlay.Helium.DayNight.Base" tools:ignore="ResourceCycle">
+        <item name="android:colorBackground">@color/helium_surface_dark</item>
+        <item name="colorSurface">@color/helium_surface_dark</item>
+        <item name="searchBarColor">@color/helium_search_bar_dark</item>
+    </style>
+
+    <style name="Widget.MaterialComponents.Toolbar.PrimarySurface" parent="@style/Widget.MaterialComponents.Toolbar.Surface" />
+</resources>

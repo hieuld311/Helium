@@ -45,7 +45,6 @@ public class LibraryUpdate extends Thread {
     private final Listener mListener;
     private Result mResult;
     private Map<String, Boolean> mScanFailureRetryMap;
-    private boolean mUseMediaStore;
 
     public interface Listener {
         void onLibraryUpdateAddedBook();
@@ -57,7 +56,6 @@ public class LibraryUpdate extends Thread {
         super(TAG);
         this.mContext = context;
         this.mHandler = new Handler(Looper.getMainLooper());
-        this.mUseMediaStore = !force;
         this.mForced = force;
         this.mListener = listener;
     }
@@ -121,22 +119,7 @@ public class LibraryUpdate extends Thread {
         }
 
         this.mResult = new Result();
-        if (this.mUseMediaStore) {
-            addBooksFromStore("external", db);
-        }
-
-        if (!this.mUseMediaStore) {
-            if (this.mLibraryFolder != null) {
-                addBooksFromFolder(this.mLibraryFolder, db);
-            } else {
-                String state = Environment.getExternalStorageState();
-                if (Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-                    addBooksFromFolder(Environment.getExternalStorageDirectory(), db);
-                } else {
-                    Log.d(TAG, "External storage is not available.");
-                }
-            }
-        }
+        addBooksFromStore("external", db);
 
         try (Cursor cursor = db.query(BooksTable.TABLE_NAME,
                 new String[]{"_id", "file_path", BooksTable.COLUMN_COVER, BooksTable.COLUMN_TITLE, BooksTable.COLUMN_HASH, "hidden", BooksTable.COLUMN_LIBRARY_VERSION},
@@ -173,8 +156,8 @@ public class LibraryUpdate extends Thread {
             }
         }
 
-        Log.d(TAG, "Library update from " + (this.mUseMediaStore ? "media store" : "filesystem") +
-                " took " + (System.currentTimeMillis() - startTime) + "ms, " + this.mResult);
+        Log.d(TAG, "Library update from media store took " +
+                (System.currentTimeMillis() - startTime) + "ms, " + this.mResult);
 
         return this.mResult;
     }
@@ -241,10 +224,8 @@ public class LibraryUpdate extends Thread {
                 MediaStore.Files.getContentUri(volumeName),
                 new String[]{"_data"},
                 "_data LIKE ?", new String[]{"%.epub"}, null)) {
-
             if (cursor == null) {
-                Log.e(TAG, "Media store query returned null. Reverting to filesystem.");
-                this.mUseMediaStore = false;
+                Log.e(TAG, "Media store query returned null.");
                 return;
             }
             while (cursor.moveToNext()) {
@@ -253,22 +234,6 @@ public class LibraryUpdate extends Thread {
                 File file = new File(path);
                 if (file.exists() && !file.isDirectory()) {
                     addBookIfMissing(path, db);
-                }
-            }
-        }
-    }
-
-    private void addBooksFromFolder(File folder, SQLiteDatabase db) throws Throwable {
-        File[] files = folder.listFiles();
-        if (files == null) return;
-
-        for (File file : files) {
-            if (this.mCancelled) return;
-            if (file.canRead()) {
-                if (file.isDirectory()) {
-                    addBooksFromFolder(file, db);
-                } else if (file.getAbsolutePath().toLowerCase().endsWith(".epub")) {
-                    addBookIfMissing(file.getAbsolutePath(), db);
                 }
             }
         }

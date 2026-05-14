@@ -43,31 +43,19 @@ public class SettingsActivity extends BaseActivity {
             }
 
             // Open source licenses
-            findPreference("licenses").setOnPreferenceClickListener(preference -> {
-                startActivity(new Intent(getActivity(), SettingsHtmlActivity.class)
-                        .putExtra(SettingsHtmlActivity.EXTRA_FILE, "licenses")
-                        .putExtra(SettingsHtmlActivity.EXTRA_TITLE_ID, R.string.pref_licenses_title));
-                return true;
-            });
-
-            // Privacy policy
-            findPreference("privacy").setOnPreferenceClickListener(preference -> {
-                startActivity(new Intent(Intent.ACTION_VIEW)
-                        .setData(Uri.parse("https://faultexception.github.io/lithium/privacy.html")));
-                return true;
-            });
-
-            // Backup & Restore
-//            findPreference("backups").setOnPreferenceClickListener(preference -> {
-//                startActivity(new Intent(getActivity(), BackupsActivity.class));
+//            findPreference("licenses").setOnPreferenceClickListener(preference -> {
+//                startActivity(new Intent(getActivity(), SettingsHtmlActivity.class)
+//                        .putExtra(SettingsHtmlActivity.EXTRA_FILE, "licenses")
+//                        .putExtra(SettingsHtmlActivity.EXTRA_TITLE_ID, R.string.pref_licenses_title));
 //                return true;
 //            });
 
-            // Hide sync preference since sync feature is removed
-            Preference syncPref = findPreference("sync");
-            if (syncPref != null) {
-                syncPref.setVisible(false);
-            }
+            // Privacy policy
+//            findPreference("privacy").setOnPreferenceClickListener(preference -> {
+//                startActivity(new Intent(Intent.ACTION_VIEW)
+//                        .setData(Uri.parse("https://faultexception.github.io/lithium/privacy.html")));
+//                return true;
+//            });
 
             // App theme
             ListPreference listPreference = (ListPreference) findPreference("app_theme");

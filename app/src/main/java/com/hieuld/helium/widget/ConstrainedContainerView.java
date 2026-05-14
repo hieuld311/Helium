@@ -15,7 +15,7 @@ public class ConstrainedContainerView extends FrameLayout {
         super(context, attrs);
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ConstrainedContainerView, 0, 0);
-            this.mMaxHeight = a.getDimensionPixelSize(R.styleable.ConstrainedContainerView_maxHeight, 0);
+            this.mMaxHeight = a.getDimensionPixelSize(R.styleable.ConstrainedContainerView_maxViewHeight, 0);
             a.recycle();
         }
     }

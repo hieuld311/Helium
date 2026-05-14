@@ -14,10 +14,6 @@
         android:key="app_theme"
         android:summary="%s"
         android:negativeButtonText="@null"/>
-    <Preference
-        android:title="@string/pref_sync"
-        android:key="sync"
-        android:summary="@string/pref_sync_off"/>
     <PreferenceCategory android:title="@string/pref_category_navigation">
         <SwitchPreferenceCompat
             android:title="@string/pref_tap_pagination_title"
@@ -72,11 +68,11 @@
             android:title="@string/pref_build_version_title"
             android:selectable="false"
             android:key="build_version"/>
-        <Preference
-            android:title="@string/pref_privacy_title"
-            android:key="privacy"/>
-        <Preference
-            android:title="@string/pref_licenses_title"
-            android:key="licenses"/>
+<!--        <Preference-->
+<!--            android:title="@string/pref_privacy_title"-->
+<!--            android:key="privacy"/>-->
+<!--        <Preference-->
+<!--            android:title="@string/pref_licenses_title"-->
+<!--            android:key="licenses"/>-->
     </PreferenceCategory>
 </PreferenceScreen>

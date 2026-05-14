@@ -106,19 +106,19 @@
             android:fitsSystemWindows="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:systemBarsColor="@color/search_status_bar_color">
+            app:systemBarsColor="?attr/surfaceStatusBarColor">
             <LinearLayout
                 android:orientation="vertical"
-                android:background="@color/reader_search_bg_color"
+                android:background="?attr/colorSurface"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <com.hieuld.helium.widget.SearchBarView
                     android:theme="@style/ThemeOverlay.Helium.DayNight.ActionBar"
                     android:id="@+id/search_bar"
-                    android:background="@color/search_toolbar_color"
+                    android:background="?attr/searchBarColor"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:hint="@string/reader_search_hint"/>
+                    app:hint="@string/reader_search_hint"/>
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
@@ -223,12 +223,12 @@
     <com.hieuld.helium.widget.ScrimInsetsFrameLayout
         android:layout_gravity="end"
         android:id="@+id/drawer_scrim"
-        android:background="@color/drawer_background_color"
+        android:background="?attr/drawerBackgroundColor"
         android:fitsSystemWindows="true"
         android:clickable="true"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        app:insetForeground="@color/drawer_scrim_color">
+        app:insetForegroundColor="@color/drawer_scrim_color">
         <fragment
             android:name="com.hieuld.helium.ReaderDrawerFragment"
             android:id="@+id/drawer"

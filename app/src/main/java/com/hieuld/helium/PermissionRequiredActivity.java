@@ -27,7 +27,7 @@ public class PermissionRequiredActivity extends BaseActivity implements View.OnC
         setRequiresPermissions(false);
         super.onCreate(savedInstanceState);
 
-        getWindow().setStatusBarColor(getColor(R.color.surface_status_bar_color));
+        getWindow().setStatusBarColor(ThemeUtils.resolveColor(this, R.attr.surfaceStatusBarColor, R.color.helium_surface_status_bar_light));
         if (!ThemeUtils.isInDarkMode(this)) {
             View decorView = getWindow().getDecorView();
             decorView.setSystemUiVisibility(decorView.getSystemUiVisibility() | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);

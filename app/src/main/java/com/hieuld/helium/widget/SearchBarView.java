@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +22,9 @@ import com.hieuld.helium.R;
 import com.hieuld.helium.util.Utils;
 
 public class SearchBarView extends NavigationTintedToolbar implements
-        TextWatcher, TextView.OnEditorActionListener, Toolbar.OnMenuItemClickListener, View.OnClickListener {
+        TextWatcher, TextView.OnEditorActionListener,
+        Toolbar.OnMenuItemClickListener,
+        View.OnClickListener {
 
     private Context mContext;
     private MenuItem mClearItem;
@@ -50,16 +53,16 @@ public class SearchBarView extends NavigationTintedToolbar implements
 
         int paddingHorizontal = Utils.dpToPx(this.mContext, 16);
         this.mQueryView = new EditText(this.mContext);
-        this.mQueryView.setId(R.id.search);
+        this.mQueryView.setId(R.id.search_query);
         this.mQueryView.setBackground(null);
 
-        // Khôi phục Constants thay cho magic number 268435459
         this.mQueryView.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI | EditorInfo.IME_ACTION_SEARCH);
         this.mQueryView.setInputType(InputType.TYPE_CLASS_TEXT);
 
         this.mQueryView.setTextSize(18.0f);
         this.mQueryView.setPadding(paddingHorizontal, 0, paddingHorizontal, 0);
-        this.mQueryView.setHintTextColor(ContextCompat.getColor(this.mContext, R.color.text_hint));
+        this.mQueryView.setTextColor(resolveThemeColor(android.R.attr.textColorPrimary, android.R.color.black));
+        this.mQueryView.setHintTextColor(resolveThemeColor(android.R.attr.textColorHint, R.color.text_hint));
         this.mQueryView.addTextChangedListener(this);
         this.mQueryView.setOnEditorActionListener(this);
 
@@ -68,7 +71,7 @@ public class SearchBarView extends NavigationTintedToolbar implements
 
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SearchBarView, 0, 0);
-            this.mQueryView.setHint(a.getString(R.styleable.SearchBarView_android_hint));
+            this.mQueryView.setHint(a.getString(R.styleable.SearchBarView_hint));
             a.recycle();
         }
 
@@ -78,6 +81,7 @@ public class SearchBarView extends NavigationTintedToolbar implements
 
         this.mClearItem = getMenu().findItem(R.id.clear);
         this.mVoiceItem = getMenu().findItem(R.id.voice);
+        tintMenuIcons();
     }
 
     public void setListener(SearchBarListener listener) {
@@ -87,6 +91,18 @@ public class SearchBarView extends NavigationTintedToolbar implements
     public void addExtraMenuResource(int menuResId, Toolbar.OnMenuItemClickListener listener) {
         this.mExtraMenuListener = listener;
         inflateMenu(menuResId);
+        tintMenuIcons();
+    }
+
+    private int resolveThemeColor(int attr, int fallbackResId) {
+        TypedValue typedValue = new TypedValue();
+        if (getContext().getTheme().resolveAttribute(attr, typedValue, true)) {
+            if (typedValue.resourceId != 0) {
+                return ContextCompat.getColor(getContext(), typedValue.resourceId);
+            }
+            return typedValue.data;
+        }
+        return ContextCompat.getColor(getContext(), fallbackResId);
     }
 
     public void activate() {

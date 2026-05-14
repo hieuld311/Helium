@@ -28,7 +28,7 @@ import java.util.concurrent.Callable;
  */
 public class HtmlAnnotationRenderer extends AnnotationRenderer {
 
-    private static final String JS_NAMESPACE = "LithiumAnnotations";
+    private static final String JS_NAMESPACE = "HeliumAnnotations";
     private static final String TAG = "HtmlAnnotationRenderer";
 
     private final AnnotationController mController;
