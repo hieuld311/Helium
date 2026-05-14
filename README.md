@@ -128,16 +128,3 @@ Helium follows a classic Android Activity/Fragment architecture backed by SQLite
 - Table definition pattern:
   - Database table classes centralize table and column names so feature code avoids duplicating schema strings.
 
-## Build
-
-Use the Gradle wrapper from the project root:
-
-```bash
-./gradlew :app:assembleDebug
-```
-
-On Windows:
-
-```bat
-gradlew.bat :app:assembleDebug
-```
