@@ -41,7 +41,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         super(context, str, (SQLiteDatabase.CursorFactory) null, 34);
     }
 
-    @Override // android.database.sqlite.SQLiteOpenHelper
+    @Override
     public void onCreate(SQLiteDatabase sQLiteDatabase) {
         sQLiteDatabase.execSQL(SQL_CREATE_TABLE_BOOKS);
         sQLiteDatabase.execSQL(SQL_CREATE_TABLE_HIGHLIGHTS);
@@ -70,7 +70,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         addSyncIdIndex(sQLiteDatabase, BookCategoryLinksTable.TABLE_NAME);
     }
 
-    @Override // android.database.sqlite.SQLiteOpenHelper
+    @Override
     public void onUpgrade(SQLiteDatabase sQLiteDatabase, int i, int i2) {
         if (i < 4) {
             sQLiteDatabase.execSQL(SQL_CREATE_TABLE_HIGHLIGHTS);
